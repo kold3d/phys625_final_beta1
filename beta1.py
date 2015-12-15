@@ -22,32 +22,37 @@ restMass = 510.998902
 totalEnergy = []
 momentum = []
 eta = []
-for line in lines:
-    p = line.split()
-    totalEnergy.append(float(p[0])+restMass)
-    momentum.append(np.sqrt(float(p[0])*2*restMass))
-    eta.append((2*np.pi*fine*(float(p[0])+restMass))/np.sqrt(float(p[0])*2*restMass))
-totalEnergy = np.array(totalEnergy)
-momentum = np.array(momentum)
-eta = np.array(eta)
 
-def square(list):
-    return map(lambda x: x ** 2, list)
-
+totalEnergy = np.array(energy+restMass)
+momentum = np.array(np.sqrt(energy*2.*restMass))
+eta = np.array((2*np.pi*fine*totalEnergy)/momentum)
 
 def f(zp, b):                                               #for b 0 = + and 1 = -
 
-    f = ((-1)**b * zp * eta)/(np.exp((-1)**b * zp * eta)-1)
+    f = ((-1)**b * zp * 2 * np.pi * fine * totalEnergy/momentum)/(np.exp((-1)**b * zp * 2 * np.pi * fine * totalEnergy/momentum)-1)
     return f
-y1 = np.sqrt(counts/(momentum**2 * f(20,0)))
-y2 = np.sqrt(counts/(momentum**2 * f(19,1)))
 
-print y2
+y1 = np.array(np.sqrt(counts/(momentum**2 * f(21,0))))
+y2 = np.array(np.sqrt(counts/(momentum**2 * f(19,1))))
+
+yerr = []
+
+def error(y):
+    for value in y:
+        if value > 0.:
+            yerr.append(1/np.sqrt(value))
+        else:
+            yerr.append(value)
+    return yerr
+
+print min(error(counts))
+
 
 fig, ax = plt.subplots()
 # pt0 = ax.errorbar(energy,np.sqrt(counts/(((-1)**0 * 19 * eta)/(np.exp((-1)**0 * 19 * eta)-1)*momentum*momentum)), yerr=yerr, fmt='.', ecolor='g', capthick=.2)
 
-# pt0 = ax.errorbar(energy,y1)
+# pt0 = ax.errorbar(energy,y2, yerr=error(counts), fmt='.', ecolor='g', capthick=.2)
+#pt1 = ax.errorbar(energy, y1, yerr=yerr, fmt='.', ecolor='g', capthick=.2)
 
 
 # print np.sqrt(counts/(f(19,0)*momentum*momentum))
