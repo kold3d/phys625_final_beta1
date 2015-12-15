@@ -38,17 +38,6 @@ def f(zp, b):                                               #for b 0 = + and 1 =
 y1 = np.array(np.sqrt(counts / (momentum ** 2. * f(21., 0.))))
 y2 = np.array(np.sqrt(counts / (momentum ** 2. * f(19., 1.))))
 
-# def error(y):
-#     yerr = []
-#     for value in y:
-#         if value > 0.:
-#             yerr.append(1/np.sqrt(value))
-#         else:
-#             yerr.append(value)
-#     return yerr
-#
-# print max(error(counts))
-
 yerr1 = 1. / (2. * momentum * np.sqrt(f(21., 0.)))
 yerr2 = 1. / (2. * momentum * np.sqrt(f(19., 1.)))
 
@@ -71,7 +60,7 @@ chisq1, p1 = chisquare(f_obs=y1, f_exp=linearFunc(xxfit, *popt1), ddof=len(energ
 chisq2, p2 = chisquare(f_obs=y2, f_exp=linearFunc(xxfit, *popt2), ddof=len(energy) - 2)
 
 print(
-'chisq beta-: %f, p: %f, chisq beta+: %f, p: %f' % (chisq1 / (len(energy) - 2), p1, chisq2 / (len(energy) - 2), p2))
+'chisq beta-: %f, p: %f, chisq beta+: %f, p: %f' % (chisq1, p1, chisq2, p2))
 
 ### Figures ###
 gs = gridspec.GridSpec(2, 2, height_ratios=[3.5, 1])
