@@ -67,10 +67,11 @@ residuals1 = (y1 - linearFunc(xxfit, *popt1)) / yerr1
 residuals2 = (y1 - linearFunc(xxfit, *popt2)) / yerr2
 
 ### Chi square and p-value ###
-chisq1, p1 = chisquare(f_obs=y1, f_exp=linearFunc(xxfit, *popt1))
-chisq2, p2 = chisquare(f_obs=y2, f_exp=linearFunc(xxfit, *popt2))
+chisq1, p1 = chisquare(f_obs=y1, f_exp=linearFunc(xxfit, *popt1), ddof=len(energy) - 2)
+chisq2, p2 = chisquare(f_obs=y2, f_exp=linearFunc(xxfit, *popt2), ddof=len(energy) - 2)
 
-print('chisq beta-: %f, p: %f, chisq beta+: %f, p: %f' % (chisq1, p1, chisq2, p2))
+print(
+'chisq beta-: %f, p: %f, chisq beta+: %f, p: %f' % (chisq1 / (len(energy) - 2), p1, chisq2 / (len(energy) - 2), p2))
 
 ### Figures ###
 gs = gridspec.GridSpec(2, 2, height_ratios=[3.5, 1])
